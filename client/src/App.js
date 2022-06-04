@@ -1,7 +1,9 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import { useEffect, useState } from "react";
-import differenceInHours from "date-fns/differenceInHours";
+import differenceInMinutes from "date-fns/differenceInMinutes";
+import areIntervalsOverlapping from "date-fns/areIntervalsOverlapping";
+import AvailabilityDisplay from "./components/AvailabilityDisplay";
 
 function App() {
   const pricePerHour = 10;
@@ -22,6 +24,7 @@ function App() {
   const [startDateTime, setDateTime] = useState();
   const [endDateTime, setEndDateTime] = useState();
   const [price, setPrice] = useState();
+  const [availability, setAvailability] = useState();
 
   const handleStartDateTime = (date) => {
     setDateTime(date);
@@ -30,11 +33,13 @@ function App() {
   const handleEndDateTime = (date) => {
     setEndDateTime(date);
   };
-
+  //TODO arreglar esta funcion, solo cuant a partir de una hora, hacerlo con segundos y despues redondear para arriba en horas o medias horas
+  //Calculate price based reservation hours, will round up to the nearest o'clock hour
   const calculatePrice = (startDateTime, endDateTime, pricePerHour) => {
-    const diff = differenceInHours(endDateTime, startDateTime);
-    console.log("diff", diff);
-    const price = diff * pricePerHour;
+    const diff = differenceInMinutes(endDateTime, startDateTime);
+    const hours = Math.ceil(diff / 60);
+    console.log("differenceInMinutes", diff);
+    const price = hours * pricePerHour;
     console.log("price", price);
     return price;
   };
@@ -48,8 +53,33 @@ function App() {
     }
   }, [startDateTime, endDateTime]);
 
-  const CheckAvailability = (listingBusy) => {
-    //TODO comprobar el formato de las fecha de listingBusy price!!!!
+  const CheckAvailability = (listingBusy, startDateTime, endDateTime) => {
+    const result = listingBusy.find((element) => {
+      const isOverlapping = areIntervalsOverlapping(
+        {
+          start: startDateTime,
+          end: endDateTime,
+        },
+        {
+          start: new Date(element.startDateTime),
+          end: new Date(element.endDateTime),
+        }
+      );
+
+      return isOverlapping;
+    });
+    if (result) {
+      console.log(result.status);
+      //result takes the form:
+      // {
+      //   "startDateTime": "2022-02-15T08:00:00",
+      //   "endDateTime": "2022-02-15T10:30:00",
+      //   "status": "booked" || "blocked"
+      // }
+      setAvailability(result);
+    } else {
+      setAvailability({ status: "available" });
+    }
   };
 
   return (
@@ -79,10 +109,16 @@ function App() {
           // }}
         />
       </MuiPickersUtilsProvider>
-      <button onClick={() => CheckAvailability(startDateTime, endDateTime)}>
+      <div>El precio es:{price}</div>
+      <button
+        onClick={() =>
+          CheckAvailability(listingBusy, startDateTime, endDateTime)
+        }
+      >
         Check Availability
       </button>
-      <div>El precio es:{price}</div>
+
+      {availability && <AvailabilityDisplay availability={availability} />}
     </div>
   );
 }
