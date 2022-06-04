@@ -10,9 +10,7 @@ import AvailabilityDisplay from "./components/AvailabilityDisplay";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import setMinutes from "date-fns/setMinutes";
-import setHours from "date-fns/setHours";
+import Select from "@mui/material/Select";
 import { hoursRange, setMinutesAndHoursToDate } from "./utils";
 function App() {
   const pricePerHour = 10;
@@ -58,7 +56,7 @@ function App() {
     setEndTime(e.target.value);
     setEndDate(finalEndDate);
   };
-  //! Puede haber un error con el tema de cambiar la fecha despeus de haber seteado las horas. Creo que no la va a recalcular bien!!!!!
+  //! Puede haber un error con el tema de cambiar la fecha despeus de haber seteado las horas. Creo que no la va a recalcular bien!!!!! Deberias cambiarlo por un useeffect que dependa de las tres variables= fecha, hora de inicio, hora de fin
   //TODO hacer el descuento del 7% cuando son mas de 8 horas!!
   const calculatePrice = (startDate, endDate, pricePerHour) => {
     const diff = differenceInMinutes(endDate, startDate);
@@ -123,6 +121,7 @@ function App() {
           }}
         />
       </MuiPickersUtilsProvider>
+
       <FormControl fullWidth>
         <InputLabel id="start-time">From:</InputLabel>
         <Select
