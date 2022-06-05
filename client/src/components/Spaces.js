@@ -8,7 +8,7 @@ const Spaces = ({ spaces, setSelectedSpace }) => {
         <SpaceCard
           key={space.listingID}
           listingID={space.listingID}
-          listingName={space.listingID}
+          listingName={space.listingName}
           pricePerHour={space.pricePerHour}
           image={space.image}
           description={space.description}
