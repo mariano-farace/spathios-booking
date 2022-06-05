@@ -1,0 +1,19 @@
+[
+  {
+    "listingID": 1,
+    "listingName": "Espacio espectacular en Tokio",
+    "pricePerHour": 125,
+    "listingBusy": [
+      {
+        "startDateTime": "2022-02-15T08:00:00",
+        "endDateTime": "2022-02-15T10:30:00",
+        "status": "booked"
+      },
+      {
+        "startDateTime": "2022-02-15T12:00:00",
+        "endDateTime": "2022-02-15T17:00:00",
+        "status": "blocked"
+      }
+    ]
+  }
+]
