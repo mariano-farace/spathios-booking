@@ -12,6 +12,7 @@ export default function MediaCard({
   pricePerHour,
   image,
   description,
+  setSelectedSpace,
 }) {
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -28,7 +29,14 @@ export default function MediaCard({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Make your Reservation</Button>
+        <Button
+          size="small"
+          onClick={() => {
+            setSelectedSpace(listingID);
+          }}
+        >
+          Make your Reservation
+        </Button>
       </CardActions>
     </Card>
   );

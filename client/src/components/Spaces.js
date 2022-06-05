@@ -1,7 +1,7 @@
 import React from "react";
 import SpaceCard from "./SpaceCard";
 
-const Spaces = ({ spaces }) => {
+const Spaces = ({ spaces, setSelectedSpace }) => {
   return (
     <div>
       {spaces.map((space) => (
@@ -12,6 +12,7 @@ const Spaces = ({ spaces }) => {
           pricePerHour={space.pricePerHour}
           image={space.image}
           description={space.description}
+          setSelectedSpace={setSelectedSpace}
         />
       ))}
     </div>

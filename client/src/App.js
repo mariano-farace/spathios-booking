@@ -5,6 +5,7 @@ import axios from "axios";
 
 function App() {
   const [spaces, setSpaces] = useState([]);
+  const [selectedSpace, setSelectedSpace] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,8 +28,11 @@ function App() {
 
   return (
     <div className="App">
-      <Spaces spaces={spaces} />
-      <Reservation />
+      {!selectedSpace ? (
+        <Spaces spaces={spaces} setSelectedSpace={setSelectedSpace} />
+      ) : (
+        <Reservation selectedSpace={selectedSpace} />
+      )}
     </div>
   );
 }

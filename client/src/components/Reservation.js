@@ -1,3 +1,4 @@
+import axios from "axios";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -11,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { hoursRange, setMinutesAndHoursToDate } from "../utils";
-function Reservation() {
+function Reservation({ selectedSpace }) {
   const pricePerHour = 10;
 
   const listingBusy = [
@@ -26,6 +27,8 @@ function Reservation() {
       status: "blocked",
     },
   ];
+
+  const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
   const [date, setDate] = useState();
   //La hora de inicion seleccionada
@@ -39,6 +42,25 @@ function Reservation() {
   const [price, setPrice] = useState();
   const [availability, setAvailability] = useState();
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      //Implementar el set loading
+      // setLoading(true);
+      try {
+        const fetched = await axios.get(
+          `http://localhost:5000/spaces/${selectedSpace}`
+        );
+        const spaceData = fetched.data;
+        setSpaceData(spaceData);
+      } catch (error) {
+        console.error(error.message);
+      }
+      //setLoading(false);
+    };
+
+    fetchData();
+  }, [selectedSpace]);
 
   const handleDatePick = (date) => {
     console.log("date from picker:", date);
@@ -68,7 +90,7 @@ function Reservation() {
   // Calcula el precio de la reserva cuando se selecciona una fecha y horas
   useEffect(() => {
     if (startDate && endDate) {
-      const price = calculatePrice(startDate, endDate, pricePerHour);
+      const price = calculatePrice(startDate, endDate, spaceData.pricePerHour);
       setPrice(price);
     } else {
       setPrice(0);
