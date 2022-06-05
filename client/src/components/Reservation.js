@@ -11,6 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { hoursRange, setMinutesAndHoursToDate, calculatePrice } from "../utils";
 import { Button } from "@mui/material";
+import Grid from "@mui/material/Grid";
 function Reservation({ selectedSpace }) {
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
@@ -105,89 +106,132 @@ function Reservation({ selectedSpace }) {
   };
 
   return (
-    <div className="App">
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DesktopDatePicker
-          variant="dialog"
-          inputFormat="dd/MM/yyyy"
-          margin="normal"
-          value={date}
-          id="date-picker"
-          label="Pick a Date"
-          onChange={handleDatePick}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-
-      <FormControl fullWidth>
-        <InputLabel id="start-time">From:</InputLabel>
-        <Select
-          labelId="start-time"
-          id="start-time"
-          label="Age"
-          value={startTime}
-          onChange={(e) => handleStartTime(e, date)}
-        >
-          {hoursRange.map((hourInterval) => (
-            <MenuItem key={hourInterval} value={hourInterval}>
-              {hourInterval}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <InputLabel id="end-time">To:</InputLabel>
-        <Select
-          labelId="end-time"
-          id="end-time"
-          label="Age"
-          value={endTime}
-          onChange={(e) => handleEndTime(e, date)}
-        >
-          {hoursRange.map((hourInterval) => (
-            <MenuItem key={hourInterval} value={hourInterval}>
-              {hourInterval}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <div>El precio es:{price}</div>
-      <Button
-        variant="contained"
-        onClick={() =>
-          CheckAvailability(spaceData.listingID, startDate, endDate)
-        }
+    <div
+      className="App"
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        style={{
+          width: "300px",
+          padding: "20px",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#f5f5f5",
+        }}
       >
-        Check Availability
-      </Button>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
+          <Grid item xs={10}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DesktopDatePicker
+                variant="dialog"
+                inputFormat="dd/MM/yyyy"
+                margin="normal"
+                value={date}
+                id="date-picker"
+                label="Pick a Date"
+                onChange={handleDatePick}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <InputLabel id="start-time">From:</InputLabel>
+              <Select
+                labelId="start-time"
+                id="start-time"
+                label="Age"
+                value={startTime}
+                onChange={(e) => handleStartTime(e, date)}
+              >
+                {hoursRange.map((hourInterval) => (
+                  <MenuItem key={hourInterval} value={hourInterval}>
+                    {hourInterval}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <InputLabel id="end-time">To:</InputLabel>
+              <Select
+                labelId="end-time"
+                id="end-time"
+                label="Age"
+                value={endTime}
+                onChange={(e) => handleEndTime(e, date)}
+              >
+                {hoursRange.map((hourInterval) => (
+                  <MenuItem key={hourInterval} value={hourInterval}>
+                    {hourInterval}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <div>Total: {price}€</div>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() =>
+                CheckAvailability(spaceData.listingID, startDate, endDate)
+              }
+            >
+              Check Availability
+            </Button>
+          </Grid>
 
-      {availability && <AvailabilityDisplay availability={availability} />}
-      {availability && availability.status === "available" && (
-        <div>
-          <TextField
-            id="message-text-field"
-            onChange={(e) => setMessage(e.target.value)}
-            label="Message"
-            variant="outlined"
-            size="small"
-            multiline
-            rows={4}
-          />
-          <Button
-            variant="contained"
-            onClick={() =>
-              createReservation(
-                spaceData.listingID,
-                startDate,
-                endDate,
-                message
-              )
-            }
-          >
-            Book Now
-          </Button>
-        </div>
-      )}
+          <Grid item xs={12}></Grid>
+          {availability && <AvailabilityDisplay availability={availability} />}
+        </Grid>
+        {availability && availability.status === "available" && (
+          <div>
+            <Grid item xs={12}>
+              <TextField
+                id="message-text-field"
+                onChange={(e) => setMessage(e.target.value)}
+                label="Message"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={() =>
+                  createReservation(
+                    spaceData.listingID,
+                    startDate,
+                    endDate,
+                    message
+                  )
+                }
+              >
+                Book Now
+              </Button>
+            </Grid>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
