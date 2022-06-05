@@ -1,8 +1,7 @@
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import differenceInMinutes from "date-fns/differenceInMinutes";
 import areIntervalsOverlapping from "date-fns/areIntervalsOverlapping";
@@ -107,8 +106,8 @@ function App() {
 
   return (
     <div className="App">
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DesktopDatePicker
           variant="dialog"
           format="dd/MM/yyyy"
           margin="normal"
@@ -116,11 +115,9 @@ function App() {
           id="date-picker"
           label="Pick a Date"
           onChange={handleDatePick}
-          KeyboardButtonProps={{
-            "aria-label": "change date",
-          }}
+          renderInput={(params) => <TextField {...params} />}
         />
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
 
       <FormControl fullWidth>
         <InputLabel id="start-time">From:</InputLabel>
