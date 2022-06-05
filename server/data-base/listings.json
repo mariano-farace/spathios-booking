@@ -3,6 +3,8 @@
     "listingID": 1,
     "listingName": "Espacio espectacular en Tokio",
     "pricePerHour": 125,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE4WNW8-n91pzEXmp5O-E_B5bq3MkYxcV6_SNhcMGfFHQg596Gw99vFpM1ncJptsMFdpA&usqp=CAU",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam luctus lacus ac enim lacinia dignissim. Suspendisse varius sem sed malesuada vehicula. Proin at hendrerit metus. Maecenas ut eros vestibulum,ultricies est id, aliquam justo.",
     "listingBusy": [
       {
         "startDateTime": "2022-02-15T08:00:00",
