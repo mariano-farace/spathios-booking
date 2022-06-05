@@ -15,13 +15,11 @@ router.get("/all-spaces", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
 
-  console.log("type of id", typeof id);
   try {
     const rawData = await fs.readFile("./data-base/listings.json");
     let data = JSON.parse(rawData);
 
     const space = data.find((element) => element.listingID === id);
-    console.log("space", space);
     res.status(200).json(space);
   } catch (err) {
     res.status(500).json({ message: err });

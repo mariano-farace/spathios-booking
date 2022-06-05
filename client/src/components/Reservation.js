@@ -5,29 +5,14 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import differenceInMinutes from "date-fns/differenceInMinutes";
-import areIntervalsOverlapping from "date-fns/areIntervalsOverlapping";
 import AvailabilityDisplay from "../components/AvailabilityDisplay";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { hoursRange, setMinutesAndHoursToDate } from "../utils";
+import { Button } from "@mui/material";
 function Reservation({ selectedSpace }) {
-  const pricePerHour = 10;
-
-  const listingBusy = [
-    {
-      startDateTime: "2022-02-15T08:00:00",
-      endDateTime: "2022-02-15T10:30:00",
-      status: "booked",
-    },
-    {
-      startDateTime: "2022-02-15T12:00:00",
-      endDateTime: "2022-02-15T17:00:00",
-      status: "blocked",
-    },
-  ];
-
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
   const [date, setDate] = useState();
@@ -43,6 +28,7 @@ function Reservation({ selectedSpace }) {
   const [availability, setAvailability] = useState();
   const [message, setMessage] = useState("");
 
+  // Will fetch information about selected space
   useEffect(() => {
     const fetchData = async () => {
       //Implementar el set loading
@@ -74,6 +60,7 @@ function Reservation({ selectedSpace }) {
 
   const handleEndTime = (e, date) => {
     const finalEndDate = setMinutesAndHoursToDate(date, e.target.value);
+    console.log("finalEndDate:", finalEndDate);
     setEndTime(e.target.value);
     setEndDate(finalEndDate);
   };
@@ -83,7 +70,6 @@ function Reservation({ selectedSpace }) {
     const diff = differenceInMinutes(endDate, startDate);
     const hours = diff / 60;
     const price = hours * pricePerHour;
-    console.log("price", price);
     return price;
   };
 
@@ -95,43 +81,29 @@ function Reservation({ selectedSpace }) {
     } else {
       setPrice(0);
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, spaceData]);
 
-  const CheckAvailability = (listingBusy, startDateTime, endDateTime) => {
-    const result = listingBusy.find((element) => {
-      const isOverlapping = areIntervalsOverlapping(
+  const CheckAvailability = async (id, startDate, endDate) => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/reservation/availability",
         {
-          start: startDateTime,
-          end: endDateTime,
-        },
-        {
-          start: new Date(element.startDateTime),
-          end: new Date(element.endDateTime),
+          params: { id, startDate, endDate },
         }
       );
-
-      return isOverlapping;
-    });
-    if (result) {
-      console.log(result.status);
-      //result takes the form:
-      // {
-      //   "startDateTime": "2022-02-15T08:00:00",
-      //   "endDateTime": "2022-02-15T10:30:00",
-      //   "status": "booked" || "blocked"
-      // }
-      setAvailability(result);
-    } else {
-      setAvailability({ status: "available" });
+      console.log("res.data", res.data);
+      setAvailability(res.data);
+    } catch (error) {
+      console.log(error);
     }
   };
-
+  //TODO chage input format from picker: make it DD/MM/YY
   return (
     <div className="App">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DesktopDatePicker
           variant="dialog"
-          format="dd/MM/yyyy"
+          inputFormat="dd/MM/yyyy"
           margin="normal"
           value={date}
           id="date-picker"
@@ -174,11 +146,14 @@ function Reservation({ selectedSpace }) {
         </Select>
       </FormControl>
       <div>El precio es:{price}</div>
-      <button
-        onClick={() => CheckAvailability(listingBusy, startDate, endDate)}
+      <Button
+        variant="contained"
+        onClick={() =>
+          CheckAvailability(spaceData.listingID, startDate, endDate)
+        }
       >
         Check Availability
-      </button>
+      </Button>
 
       {availability && <AvailabilityDisplay availability={availability} />}
       <TextField
