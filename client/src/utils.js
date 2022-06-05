@@ -1,5 +1,6 @@
 import setMinutes from "date-fns/setMinutes";
 import setHours from "date-fns/setHours";
+import differenceInMinutes from "date-fns/differenceInMinutes";
 
 export const hoursRange = [
   "6:00",
@@ -45,4 +46,11 @@ export const setMinutesAndHoursToDate = (date, timeString) => {
   const [hour, minutes] = timeString.split(":");
   const finalStartDate = setMinutes(setHours(date, hour), minutes);
   return finalStartDate;
+};
+
+export const calculatePrice = (startDate, endDate, pricePerHour) => {
+  const diff = differenceInMinutes(endDate, startDate);
+  const hours = diff / 60;
+  const price = hours * pricePerHour;
+  return price;
 };
