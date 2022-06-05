@@ -2,13 +2,10 @@ import React from "react";
 import Alert from "@mui/material/Alert";
 const { format } = require("date-fns");
 const AvailabilityDisplay = ({ availability }) => {
-  console.log("availability from props", availability);
-
-  console.log("availability.status", availability.status);
   return (
     <div>
       {availability.status === "available" && (
-        <Alert severity="success">Available - Make your Reservation!!</Alert>
+        <Alert severity="success">Available - Proceed to Booking</Alert>
       )}
       {availability.status === ("booked" || "blocked") && (
         <Alert severity="error">

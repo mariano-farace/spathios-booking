@@ -1,5 +1,5 @@
-const { CheckAvailability } = require("../helper");
-
+const { CheckAvailability, calculatePrice } = require("../helper");
+var uuid = require("uuid");
 const router = require("express").Router();
 const fs = require("fs").promises;
 
@@ -37,6 +37,62 @@ router.get("/availability", async (req, res) => {
     );
     console.log("availability", availability);
     res.status(200).json(availability);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err });
+  }
+});
+
+router.post("/book", async (req, res) => {
+  const id = parseInt(req.body.id);
+  const startDateTime = req.body.startDate;
+  const endDateTime = req.body.endDate;
+  const userMessage = req.body.message;
+
+  try {
+    const rawData = await fs.readFile("./data-base/listings.json");
+
+    let data = JSON.parse(rawData);
+
+    // Have to get the item index to update it later for the id might not be equal to the index
+    var foundIndex = data.findIndex((element) => element.listingID === id);
+    console.log("foundIndex", foundIndex);
+    const space = data.find((element) => element.listingID === id);
+
+    //Generate a random reservation id
+    const reservationID = uuid.v4();
+
+    //Update space object
+    space.listingBusy.push({
+      startDateTime,
+      endDateTime,
+      status: "booked",
+      reservationID,
+    });
+
+    console.log("new space with new busy time", space);
+    //Replace the old item with the new one by its index number.
+    data[foundIndex] = space;
+
+    //Write the new data to the file
+    await fs.writeFile("./data-base/listings.json", JSON.stringify(data));
+
+    //precio total de la reserva,
+    const price = calculatePrice(
+      startDateTime,
+      endDateTime,
+      space.pricePerHour
+    );
+
+    res.status(200).json({
+      message: "Booking successful",
+      reservationID,
+      checkIn: startDateTime,
+      checkOut: endDateTime,
+      totalPrice: price,
+      listingBusy: space.listingBusy,
+      userMessage,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err });

@@ -4,13 +4,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
-import differenceInMinutes from "date-fns/differenceInMinutes";
 import AvailabilityDisplay from "../components/AvailabilityDisplay";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { hoursRange, setMinutesAndHoursToDate } from "../utils";
+import { hoursRange, setMinutesAndHoursToDate, calculatePrice } from "../utils";
 import { Button } from "@mui/material";
 function Reservation({ selectedSpace }) {
   const [spaceData, setSpaceData] = useState(null);
@@ -66,12 +65,6 @@ function Reservation({ selectedSpace }) {
   };
   //! Puede haber un error con el tema de cambiar la fecha despeus de haber seteado las horas. Creo que no la va a recalcular bien!!!!! Deberias cambiarlo por un useeffect que dependa de las tres variables= fecha, hora de inicio, hora de fin
   //TODO hacer el descuento del 7% cuando son mas de 8 horas!!
-  const calculatePrice = (startDate, endDate, pricePerHour) => {
-    const diff = differenceInMinutes(endDate, startDate);
-    const hours = diff / 60;
-    const price = hours * pricePerHour;
-    return price;
-  };
 
   // Calcula el precio de la reserva cuando se selecciona una fecha y horas
   useEffect(() => {
@@ -91,13 +84,26 @@ function Reservation({ selectedSpace }) {
           params: { id, startDate, endDate },
         }
       );
-      console.log("res.data", res.data);
       setAvailability(res.data);
     } catch (error) {
       console.log(error);
     }
   };
-  //TODO chage input format from picker: make it DD/MM/YY
+
+  const createReservation = async (id, startDate, endDate, message) => {
+    try {
+      const res = await axios.post("http://localhost:5000/reservation/book", {
+        id,
+        startDate,
+        endDate,
+        message,
+      });
+      console.log("reservation response:", res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="App">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -156,15 +162,32 @@ function Reservation({ selectedSpace }) {
       </Button>
 
       {availability && <AvailabilityDisplay availability={availability} />}
-      <TextField
-        id="message-text-field"
-        onChange={(e) => setMessage(e.target.value)}
-        label="Message"
-        variant="outlined"
-        size="small"
-        multiline
-        rows={4}
-      />
+      {availability && availability.status === "available" && (
+        <div>
+          <TextField
+            id="message-text-field"
+            onChange={(e) => setMessage(e.target.value)}
+            label="Message"
+            variant="outlined"
+            size="small"
+            multiline
+            rows={4}
+          />
+          <Button
+            variant="contained"
+            onClick={() =>
+              createReservation(
+                spaceData.listingID,
+                startDate,
+                endDate,
+                message
+              )
+            }
+          >
+            Book Now
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

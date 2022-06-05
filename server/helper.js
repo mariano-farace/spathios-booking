@@ -1,5 +1,6 @@
 var areIntervalsOverlapping = require("date-fns/areIntervalsOverlapping");
 var parseISO = require("date-fns/parseISO");
+var differenceInMinutes = require("date-fns/differenceInMinutes");
 
 const CheckAvailability = (listingBusy, startDateTime, endDateTime) => {
   //If no overlap, will return undefined. If overlap, will return the object with the overlap with this form:
@@ -31,4 +32,11 @@ const CheckAvailability = (listingBusy, startDateTime, endDateTime) => {
   }
 };
 
-module.exports = { CheckAvailability };
+const calculatePrice = (startDate, endDate, pricePerHour) => {
+  const diff = differenceInMinutes(parseISO(endDate), parseISO(startDate));
+  const hours = diff / 60;
+  const price = hours * pricePerHour;
+  return price;
+};
+
+module.exports = { CheckAvailability, calculatePrice };
