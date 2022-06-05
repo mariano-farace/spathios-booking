@@ -48,15 +48,9 @@ export const setMinutesAndHoursToDate = (date, timeString) => {
 };
 
 export const calculatePrice = (startDate, endDate, pricePerHour) => {
-  console.log("startDate:", startDate);
-  console.log("endDate:", endDate);
-  console.log("pricePerHour:", pricePerHour);
   const diff = differenceInMinutes(endDate, startDate);
   const hours = diff / 60;
   const price = hours * pricePerHour;
-  console.log("diff:", diff);
-  console.log("hours:", hours);
-  console.log("price:", price);
 
   return price;
 };
