@@ -36,9 +36,9 @@ function App() {
   const [startDate, setStartDate] = useState();
   //La fecha y hora de fin de la reserva
   const [endDate, setEndDate] = useState();
-
   const [price, setPrice] = useState();
   const [availability, setAvailability] = useState();
+  const [message, setMessage] = useState("");
 
   const handleDatePick = (date) => {
     console.log("date from picker:", date);
@@ -159,6 +159,15 @@ function App() {
       </button>
 
       {availability && <AvailabilityDisplay availability={availability} />}
+      <TextField
+        id="message-text-field"
+        onChange={(e) => setMessage(e.target.value)}
+        label="Message"
+        variant="outlined"
+        size="small"
+        multiline
+        rows={4}
+      />
     </div>
   );
 }
