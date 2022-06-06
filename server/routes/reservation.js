@@ -25,6 +25,9 @@ router.get("/availability", async (req, res) => {
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
 
+  console.log("startDate:", startDate);
+  console.log("endDate:", endDate);
+
   try {
     const rawData = await fs.readFile("./data-base/listings.json");
 
