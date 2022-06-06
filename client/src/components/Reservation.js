@@ -77,8 +77,16 @@ function Reservation({ selectedSpace }) {
     }
   }, [startDate, endDate, spaceData]);
 
-  const CheckAvailability = async (id, startDate, endDate) => {
+  const CheckAvailability = async (event) => {
+    event.preventDefault();
+    console.log("Checking availability...");
+    console.log("startDate:", startDate);
+    console.log("endDate:", endDate);
+    const id = spaceData.listingID;
+    console.log("id:", id);
+
     try {
+      console.log("le apretaste al boton de checar disponibilidad");
       const res = await axios.get(
         "http://localhost:5000/reservation/availability",
         {
@@ -87,6 +95,8 @@ function Reservation({ selectedSpace }) {
       );
       setAvailability(res.data);
     } catch (error) {
+      alert(error.message);
+      debugger;
       console.log(error);
     }
   };
@@ -125,112 +135,107 @@ function Reservation({ selectedSpace }) {
           backgroundColor: "#f5f5f5",
         }}
       >
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid item xs={10}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DesktopDatePicker
-                variant="dialog"
-                inputFormat="dd/MM/yyyy"
-                margin="normal"
-                value={date}
-                id="date-picker"
-                label="Pick a Date"
-                onChange={handleDatePick}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="start-time">From:</InputLabel>
-              <Select
-                labelId="start-time"
-                id="start-time"
-                label="Age"
-                value={startTime}
-                onChange={(e) => handleStartTime(e, date)}
-              >
-                {hoursRange.map((hourInterval) => (
-                  <MenuItem key={hourInterval} value={hourInterval}>
-                    {hourInterval}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="end-time">To:</InputLabel>
-              <Select
-                labelId="end-time"
-                id="end-time"
-                label="Age"
-                value={endTime}
-                onChange={(e) => handleEndTime(e, date)}
-              >
-                {hoursRange.map((hourInterval) => (
-                  <MenuItem key={hourInterval} value={hourInterval}>
-                    {hourInterval}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <div>Total: {price}€</div>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={() =>
-                CheckAvailability(spaceData.listingID, startDate, endDate)
-              }
-            >
-              Check Availability
-            </Button>
-          </Grid>
-
-          <Grid item xs={12}></Grid>
-          {availability && <AvailabilityDisplay availability={availability} />}
-        </Grid>
-        {availability && availability.status === "available" && (
-          <div>
-            <Grid item xs={12}>
-              <TextField
-                id="message-text-field"
-                onChange={(e) => setMessage(e.target.value)}
-                label="Message"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-              />
+        <form onSubmit={(event) => CheckAvailability(event)}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item xs={10}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  variant="dialog"
+                  inputFormat="dd/MM/yyyy"
+                  margin="normal"
+                  value={date}
+                  id="date-picker"
+                  label="Pick a Date"
+                  onChange={handleDatePick}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel id="start-time">From:</InputLabel>
+                <Select
+                  labelId="start-time"
+                  id="start-time"
+                  label="Age"
+                  value={startTime}
+                  onChange={(e) => handleStartTime(e, date)}
+                >
+                  {hoursRange.map((hourInterval) => (
+                    <MenuItem key={hourInterval} value={hourInterval}>
+                      {hourInterval}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                <InputLabel id="end-time">To:</InputLabel>
+                <Select
+                  labelId="end-time"
+                  id="end-time"
+                  label="Age"
+                  value={endTime}
+                  onChange={(e) => handleEndTime(e, date)}
+                >
+                  {hoursRange.map((hourInterval) => (
+                    <MenuItem key={hourInterval} value={hourInterval}>
+                      {hourInterval}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <div>Total: {price}€</div>
             </Grid>
             <Grid item xs={12}>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={() =>
-                  createReservation(
-                    spaceData.listingID,
-                    startDate,
-                    endDate,
-                    message
-                  )
-                }
-              >
-                Book Now
+              <Button type="submit" variant="contained" fullWidth>
+                Check Availability
               </Button>
             </Grid>
-          </div>
-        )}
+          </Grid>
+          {availability && <AvailabilityDisplay availability={availability} />}
+          {availability && availability.status === "available" && (
+            <div>
+              <Grid item xs={12}>
+                <TextField
+                  id="message-text-field"
+                  onChange={(e) => setMessage(e.target.value)}
+                  label="Message"
+                  variant="outlined"
+                  fullWidth
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() =>
+                    createReservation(
+                      spaceData.listingID,
+                      startDate,
+                      endDate,
+                      message
+                    )
+                  }
+                >
+                  Book Now
+                </Button>
+              </Grid>
+            </div>
+          )}
+        </form>
+        <Grid item xs={12}></Grid>
       </div>
     </div>
   );
