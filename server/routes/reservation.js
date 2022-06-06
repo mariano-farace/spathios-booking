@@ -2,6 +2,7 @@ const { CheckAvailability, calculatePrice } = require("../helper");
 var uuid = require("uuid");
 const router = require("express").Router();
 const fs = require("fs").promises;
+var format = require("date-fns/format");
 
 // This endpoint is not in use. Could be used to render only available time frames on fronted
 router.get("/listingbusy", async (req, res) => {
@@ -49,6 +50,15 @@ router.post("/book", async (req, res) => {
   const endDateTime = req.body.endDate;
   const userMessage = req.body.message;
 
+  const formattedStartDateTime = format(
+    new Date(startDateTime),
+    "yyyy-MM-dd'T'HH:mm:ss"
+  );
+  const formattedEndDateTime = format(
+    new Date(endDateTime),
+    "yyyy-MM-dd'T'HH:mm:ss"
+  );
+
   try {
     const rawData = await fs.readFile("./data-base/listings.json");
 
@@ -56,7 +66,6 @@ router.post("/book", async (req, res) => {
 
     // Have to get the item index to update it later for the id might not be equal to the index
     var foundIndex = data.findIndex((element) => element.listingID === id);
-    console.log("foundIndex", foundIndex);
     const space = data.find((element) => element.listingID === id);
 
     //Generate a random reservation id
@@ -64,8 +73,8 @@ router.post("/book", async (req, res) => {
 
     //Update space object
     space.listingBusy.push({
-      startDateTime,
-      endDateTime,
+      formattedStartDateTime,
+      formattedEndDateTime,
       status: "booked",
       reservationID,
     });
@@ -79,16 +88,16 @@ router.post("/book", async (req, res) => {
 
     //precio total de la reserva,
     const price = calculatePrice(
-      startDateTime,
-      endDateTime,
+      formattedStartDateTime,
+      formattedEndDateTime,
       space.pricePerHour
     );
 
     res.status(200).json({
       message: "Booking successful",
       reservationID,
-      checkIn: startDateTime,
-      checkOut: endDateTime,
+      checkIn: formattedStartDateTime,
+      checkOut: formattedEndDateTime,
       totalPrice: price,
       listingBusy: space.listingBusy,
       userMessage,

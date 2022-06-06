@@ -15,6 +15,12 @@
         "startDateTime": "2022-02-15T12:00:00",
         "endDateTime": "2022-02-15T17:00:00",
         "status": "blocked"
+      },
+      {
+        "formattedStartDateTime": "2022-08-06T06:00:02",
+        "formattedEndDateTime": "2022-08-06T07:00:02",
+        "status": "booked",
+        "reservationID": "e7394f38-f55e-4738-9891-926ffac72a40"
       }
     ]
   }
