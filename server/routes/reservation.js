@@ -73,8 +73,8 @@ router.post("/book", async (req, res) => {
 
     //Update space object
     space.listingBusy.push({
-      formattedStartDateTime,
-      formattedEndDateTime,
+      startDateTime: formattedStartDateTime,
+      endDateTime: formattedEndDateTime,
       status: "booked",
       reservationID,
     });
