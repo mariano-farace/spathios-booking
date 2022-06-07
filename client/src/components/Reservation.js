@@ -38,6 +38,7 @@ function Reservation({ selectedSpace }) {
   const [messageError, setMessageError] = useState();
   const [messageErrorHelperText, setMessageErrorHelperText] = useState();
   const [summaryInfo, setSummaryInfo] = useState();
+  const [toHoursRange, setToHoursRange] = useState(hoursRange);
 
   // Will fetch information about selected space
   useEffect(() => {
@@ -60,7 +61,6 @@ function Reservation({ selectedSpace }) {
   }, [selectedSpace]);
 
   const handleDatePick = (date) => {
-    console.log("date from picker:", date);
     setDate(date);
     //Prevent errors and unintended behavior if user changes the date after selecting the time
     setStartTime("");
@@ -143,6 +143,17 @@ function Reservation({ selectedSpace }) {
     }
   };
 
+  //Will change end hours range (TO) based on selected start time (FROM)
+
+  useEffect(() => {
+    if (startTime) {
+      console.log("startTime:", startTime);
+      const index = hoursRange.indexOf(startTime);
+      const newHoursRange = hoursRange.slice(index + 2);
+      setToHoursRange(newHoursRange);
+    }
+  }, [startTime]);
+
   return (
     <div
       className="App"
@@ -217,7 +228,7 @@ function Reservation({ selectedSpace }) {
                   value={endTime}
                   onChange={(e) => handleEndTime(e, date)}
                 >
-                  {hoursRange.map((hourInterval) => (
+                  {toHoursRange.map((hourInterval) => (
                     <MenuItem key={hourInterval} value={hourInterval}>
                       {hourInterval}
                     </MenuItem>
@@ -247,7 +258,7 @@ function Reservation({ selectedSpace }) {
               <TextField
                 id="message-text-field"
                 onChange={(event) => messageValidation(event)}
-                label="Message"
+                label="Any questions? Write them here"
                 variant="outlined"
                 fullWidth
                 multiline
