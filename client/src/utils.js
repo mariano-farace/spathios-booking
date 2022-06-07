@@ -54,3 +54,9 @@ export const calculatePrice = (startDate, endDate, pricePerHour) => {
 
   return price;
 };
+
+export const mailRegex =
+  /[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+
+//Will match 9 or more digits in a row in a text
+export const phoneRegex = /!*([0-9]!*){9,}$/g;

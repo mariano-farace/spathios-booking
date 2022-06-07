@@ -9,7 +9,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { hoursRange, setMinutesAndHoursToDate, calculatePrice } from "../utils";
+import {
+  hoursRange,
+  setMinutesAndHoursToDate,
+  calculatePrice,
+  mailRegex,
+  phoneRegex,
+} from "../utils";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 function Reservation({ selectedSpace }) {
@@ -27,6 +33,8 @@ function Reservation({ selectedSpace }) {
   const [price, setPrice] = useState();
   const [availability, setAvailability] = useState();
   const [message, setMessage] = useState("");
+  const [messageError, setMessageError] = useState();
+  const [messageErrorHelperText, setMessageErrorHelperText] = useState();
 
   // Will fetch information about selected space
   useEffect(() => {
@@ -93,6 +101,9 @@ function Reservation({ selectedSpace }) {
   };
 
   const createReservation = async (id, startDate, endDate, message) => {
+    if (messageError) {
+      return;
+    }
     try {
       const res = await axios.post("http://localhost:5000/reservation/book", {
         id,
@@ -103,6 +114,19 @@ function Reservation({ selectedSpace }) {
       console.log("reservation response:", res.data);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const messageValidation = (event) => {
+    if (event.target.value.match(mailRegex)) {
+      setMessageError(true);
+      setMessageErrorHelperText("e-mails not allowed");
+    } else if (event.target.value.match(phoneRegex)) {
+      setMessageError(true);
+      setMessageErrorHelperText("Phone numbers not allowed");
+    } else {
+      setMessageError(false);
+      setMessage(event.target.value);
     }
   };
 
@@ -209,12 +233,14 @@ function Reservation({ selectedSpace }) {
             <Grid item xs={12}>
               <TextField
                 id="message-text-field"
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(event) => messageValidation(event)}
                 label="Message"
                 variant="outlined"
                 fullWidth
                 multiline
                 rows={4}
+                helperText={messageErrorHelperText}
+                error={messageError}
               />
             </Grid>
             <Grid item xs={12}>
