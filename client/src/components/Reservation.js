@@ -62,11 +62,20 @@ function Reservation({ selectedSpace }) {
   const handleDatePick = (date) => {
     console.log("date from picker:", date);
     setDate(date);
+    //Prevent errors and unintended behavior if user changes the date after selecting the time
+    setStartTime("");
+    setStartDate("");
+    setEndTime("");
+    setEndDate("");
+    //Prevents errors and unintended behavior if user changes the time after checking availability
+    setAvailability();
   };
   const handleStartTime = (e, date) => {
     const finalStartDate = setMinutesAndHoursToDate(date, e.target.value);
     setStartTime(e.target.value);
     setStartDate(finalStartDate);
+    //Prevents errors and unintended behavior if user changes the time after checking availability
+    setAvailability();
   };
 
   const handleEndTime = (e, date) => {
@@ -74,6 +83,7 @@ function Reservation({ selectedSpace }) {
     console.log("finalEndDate:", finalEndDate);
     setEndTime(e.target.value);
     setEndDate(finalEndDate);
+    setAvailability();
   };
 
   //TODO hacer el descuento del 7% cuando son mas de 8 horas!!
