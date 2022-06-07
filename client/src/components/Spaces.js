@@ -3,7 +3,13 @@ import SpaceCard from "./SpaceCard";
 
 const Spaces = ({ spaces, setSelectedSpace }) => {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        margin: "20px",
+      }}
+    >
       {spaces.map((space) => (
         <SpaceCard
           key={space.listingID}

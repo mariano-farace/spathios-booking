@@ -15,7 +15,7 @@ export default function MediaCard({
   setSelectedSpace,
 }) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 400, margin: "10px" }}>
       <CardMedia component="img" height="140" image={image} alt="space image" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">

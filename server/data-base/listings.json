@@ -15,13 +15,16 @@
         "startDateTime": "2022-02-15T12:00:00",
         "endDateTime": "2022-02-15T17:00:00",
         "status": "blocked"
-      },
-      {
-        "formattedStartDateTime": "2022-08-06T06:00:02",
-        "formattedEndDateTime": "2022-08-06T07:00:02",
-        "status": "booked",
-        "reservationID": "e7394f38-f55e-4738-9891-926ffac72a40"
       }
     ]
+  },
+
+  {
+    "listingID": 2,
+    "listingName": "Loft Creativo en Barcelona",
+    "pricePerHour": 230,
+    "image": "https://s3.eu-west-3.amazonaws.com/spathios.media.files/wp-content/uploads/2021/03/03163657/DSC_0040.jpg",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam luctus lacus ac enim lacinia dignissim. Suspendisse varius sem sed malesuada vehicula. Proin at hendrerit metus. Maecenas ut eros vestibulum,ultricies est id, aliquam justo.",
+    "listingBusy": []
   }
 ]
