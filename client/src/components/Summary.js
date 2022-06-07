@@ -1,20 +1,17 @@
 import React from "react";
-
-const Summary = ({ SummaryInfo }) => {
+import { isoStringDateToFormattedString } from "../utils";
+const Summary = ({ summaryInfo }) => {
+  console.log("SummaryInfo:", summaryInfo);
   return (
     <div>
       <h1>Reservation Summary:</h1>
-      <div>Check In: {SummaryInfo.checkIn}</div>
-      <div>Check Out: {SummaryInfo.checkOut}</div>
-      <div>Total: {SummaryInfo.totalPrice}€</div>
-      <div>Reservation ID: {SummaryInfo.reservationID}€</div>
-      <div>Your message: {SummaryInfo.userMessage}€</div>
-
-      <div></div>
-
-      <div></div>
-      <div></div>
-      <div></div>
+      <div>Check In: {isoStringDateToFormattedString(summaryInfo.checkIn)}</div>
+      <div>
+        Check Out: {isoStringDateToFormattedString(summaryInfo.checkOut)}
+      </div>
+      <div>Total: {summaryInfo.totalPrice}€</div>
+      <div>Reservation ID: {summaryInfo.reservationID}</div>
+      <div>Your message: {summaryInfo.userMessage}</div>
     </div>
   );
 };

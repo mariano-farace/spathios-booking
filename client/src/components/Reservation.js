@@ -5,6 +5,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import AvailabilityDisplay from "../components/AvailabilityDisplay";
+import Summary from "../components/Summary";
+
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -22,9 +24,9 @@ function Reservation({ selectedSpace }) {
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
   const [date, setDate] = useState(new Date());
-  //La hora de inicion seleccionada
+  //La hora de inicio seleccionada
   const [startTime, setStartTime] = useState("");
-  //La hora de finalizacion seleccionada
+  //La hora de finalización seleccionada
   const [endTime, setEndTime] = useState("");
   //La fecha y hora de inicio de la reserva
   const [startDate, setStartDate] = useState();
@@ -35,6 +37,7 @@ function Reservation({ selectedSpace }) {
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState();
   const [messageErrorHelperText, setMessageErrorHelperText] = useState();
+  const [summaryInfo, setSummaryInfo] = useState();
 
   // Will fetch information about selected space
   useEffect(() => {
@@ -100,6 +103,19 @@ function Reservation({ selectedSpace }) {
     }
   };
 
+  const messageValidation = (event) => {
+    if (event.target.value.match(mailRegex)) {
+      setMessageError(true);
+      setMessageErrorHelperText("e-mails not allowed");
+    } else if (event.target.value.match(phoneRegex)) {
+      setMessageError(true);
+      setMessageErrorHelperText("Phone numbers not allowed");
+    } else {
+      setMessageError(false);
+      setMessage(event.target.value);
+    }
+  };
+
   const createReservation = async (id, startDate, endDate, message) => {
     if (messageError) {
       return;
@@ -111,22 +127,9 @@ function Reservation({ selectedSpace }) {
         endDate,
         message,
       });
-      console.log("reservation response:", res.data);
+      setSummaryInfo(res.data);
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const messageValidation = (event) => {
-    if (event.target.value.match(mailRegex)) {
-      setMessageError(true);
-      setMessageErrorHelperText("e-mails not allowed");
-    } else if (event.target.value.match(phoneRegex)) {
-      setMessageError(true);
-      setMessageErrorHelperText("Phone numbers not allowed");
-    } else {
-      setMessageError(false);
-      setMessage(event.target.value);
     }
   };
 
@@ -261,6 +264,7 @@ function Reservation({ selectedSpace }) {
             </Grid>
           </div>
         )}
+        {summaryInfo && <Summary summaryInfo={summaryInfo} />}
       </div>
     </div>
   );

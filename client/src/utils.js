@@ -1,4 +1,5 @@
 import setMinutes from "date-fns/setMinutes";
+import format from "date-fns/format";
 import setHours from "date-fns/setHours";
 import differenceInMinutes from "date-fns/differenceInMinutes";
 export const hoursRange = [
@@ -60,3 +61,9 @@ export const mailRegex =
 
 //Will match 9 or more digits in a row in a text
 export const phoneRegex = /!*([0-9]!*){9,}$/g;
+
+export const isoStringDateToFormattedString = (isoStringDate) => {
+  const date = new Date(isoStringDate);
+
+  return `${format(date, "MMMM do, yyyy HH:mm ")}`;
+};
