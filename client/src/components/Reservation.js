@@ -15,7 +15,7 @@ import Grid from "@mui/material/Grid";
 function Reservation({ selectedSpace }) {
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(new Date());
   //La hora de inicion seleccionada
   const [startTime, setStartTime] = useState("");
   //La hora de finalizacion seleccionada
@@ -77,7 +77,8 @@ function Reservation({ selectedSpace }) {
     }
   }, [startDate, endDate, spaceData]);
 
-  const CheckAvailability = async (id, startDate, endDate) => {
+  const CheckAvailability = async (e, id, startDate, endDate) => {
+    e.preventDefault();
     try {
       const res = await axios.get(
         "http://localhost:5000/reservation/availability",
@@ -125,81 +126,84 @@ function Reservation({ selectedSpace }) {
           backgroundColor: "#f5f5f5",
         }}
       >
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
+        <form
+          onSubmit={(e) =>
+            CheckAvailability(e, spaceData.listingID, startDate, endDate)
+          }
         >
-          <Grid item xs={10}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DesktopDatePicker
-                variant="dialog"
-                inputFormat="dd/MM/yyyy"
-                margin="normal"
-                value={date}
-                id="date-picker"
-                label="Pick a Date"
-                onChange={handleDatePick}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="start-time">From:</InputLabel>
-              <Select
-                labelId="start-time"
-                id="start-time"
-                label="Age"
-                value={startTime}
-                onChange={(e) => handleStartTime(e, date)}
-              >
-                {hoursRange.map((hourInterval) => (
-                  <MenuItem key={hourInterval} value={hourInterval}>
-                    {hourInterval}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel id="end-time">To:</InputLabel>
-              <Select
-                labelId="end-time"
-                id="end-time"
-                label="Age"
-                value={endTime}
-                onChange={(e) => handleEndTime(e, date)}
-              >
-                {hoursRange.map((hourInterval) => (
-                  <MenuItem key={hourInterval} value={hourInterval}>
-                    {hourInterval}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <div>Total: {price}€</div>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={() =>
-                CheckAvailability(spaceData.listingID, startDate, endDate)
-              }
-            >
-              Check Availability
-            </Button>
-          </Grid>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item xs={10}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  variant="dialog"
+                  inputFormat="dd/MM/yyyy"
+                  margin="normal"
+                  value={date}
+                  id="date-picker"
+                  label="Pick a Date"
+                  onChange={handleDatePick}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth required={true}>
+                <InputLabel id="start-time">From:</InputLabel>
+                <Select
+                  labelId="start-time"
+                  id="start-time"
+                  label="Age"
+                  value={startTime}
+                  onChange={(e) => handleStartTime(e, date)}
+                >
+                  {hoursRange.map((hourInterval) => (
+                    <MenuItem key={hourInterval} value={hourInterval}>
+                      {hourInterval}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth required={true}>
+                <InputLabel id="end-time">To:</InputLabel>
+                <Select
+                  labelId="end-time"
+                  id="end-time"
+                  label="Age"
+                  value={endTime}
+                  onChange={(e) => handleEndTime(e, date)}
+                >
+                  {hoursRange.map((hourInterval) => (
+                    <MenuItem key={hourInterval} value={hourInterval}>
+                      {hourInterval}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={12}></Grid>
-          {availability && <AvailabilityDisplay availability={availability} />}
-        </Grid>
+            <Grid item xs={6}>
+              <div>Total: {price}€</div>
+            </Grid>
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" fullWidth>
+                Check Availability
+              </Button>
+            </Grid>
+
+            <Grid item xs={12}></Grid>
+            {availability && (
+              <AvailabilityDisplay availability={availability} />
+            )}
+          </Grid>
+        </form>
         {availability && availability.status === "available" && (
           <div>
             <Grid item xs={12}>
