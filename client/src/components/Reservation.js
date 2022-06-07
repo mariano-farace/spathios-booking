@@ -72,7 +72,7 @@ function Reservation({ selectedSpace }) {
     setEndTime(e.target.value);
     setEndDate(finalEndDate);
   };
-  //! Puede haber un error con el tema de cambiar la fecha despeus de haber seteado las horas. Creo que no la va a recalcular bien!!!!! Deberias cambiarlo por un useeffect que dependa de las tres variables= fecha, hora de inicio, hora de fin
+
   //TODO hacer el descuento del 7% cuando son mas de 8 horas!!
 
   // Calcula el precio de la reserva cuando se selecciona una fecha y horas
