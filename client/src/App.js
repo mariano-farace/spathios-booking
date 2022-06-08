@@ -30,6 +30,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Spaces spaceList={spaceList} />} />
           <Route path="/:space" element={<Reservation />} />
+          <Route path="/summary" element={<Summary />} />
         </Routes>
       </div>
     </Router>

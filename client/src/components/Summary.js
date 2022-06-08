@@ -1,6 +1,11 @@
+import { useLocation } from "react-router-dom";
 import { isoStringDateToFormattedString } from "../utils";
 import "./Summary.css";
-const Summary = ({ summaryInfo }) => {
+const Summary = () => {
+  const location = useLocation();
+  const summaryInfo = location.state;
+  console.log("summaryInfo:", summaryInfo);
+
   return (
     <div className="summary">
       <h1 className="summaryTitle">Reservation Summary</h1>

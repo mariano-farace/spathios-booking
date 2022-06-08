@@ -5,9 +5,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import AvailabilityDisplay from "../components/AvailabilityDisplay";
-import Summary from "../components/Summary";
 import { useParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -21,9 +20,9 @@ import {
 } from "../utils";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
-function Reservation({ selectedSpace }) {
+function Reservation() {
   let params = useParams();
-
+  const navigate = useNavigate();
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
   const [date, setDate] = useState(new Date());
@@ -40,7 +39,6 @@ function Reservation({ selectedSpace }) {
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState();
   const [messageErrorHelperText, setMessageErrorHelperText] = useState();
-  const [summaryInfo, setSummaryInfo] = useState();
   const [toHoursRange, setToHoursRange] = useState(hoursRange);
 
   // Will fetch information about selected space
@@ -138,7 +136,8 @@ function Reservation({ selectedSpace }) {
         endDate,
         message,
       });
-      setSummaryInfo(res.data);
+      const summaryInfo = res.data;
+      navigate("/summary", { state: summaryInfo });
     } catch (error) {
       console.log(error);
     }
@@ -287,9 +286,7 @@ function Reservation({ selectedSpace }) {
         style={{
           padding: "20px",
         }}
-      >
-        {summaryInfo && <Summary summaryInfo={summaryInfo} />}
-      </div>
+      ></div>
     </div>
   );
 }
