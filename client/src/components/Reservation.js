@@ -282,11 +282,6 @@ function Reservation() {
           </div>
         )}
       </div>
-      <div
-        style={{
-          padding: "20px",
-        }}
-      ></div>
     </div>
   );
 }
