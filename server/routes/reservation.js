@@ -69,7 +69,7 @@ router.post("/book", async (req, res) => {
     const space = data.find((element) => element.listingID === id);
 
     //Generate a random reservation id
-    const reservationID = uuid.v4();
+    const reservationID = uuid.v4().split("-")[4];
 
     //Update space object
     space.listingBusy.push({
