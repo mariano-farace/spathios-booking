@@ -5,8 +5,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import AvailabilityDisplay from "../components/AvailabilityDisplay";
-import Summary from "../components/Summary";
-
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -20,7 +20,9 @@ import {
 } from "../utils";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
-function Reservation({ selectedSpace }) {
+function Reservation() {
+  let params = useParams();
+  const navigate = useNavigate();
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
   const [date, setDate] = useState(new Date());
@@ -37,17 +39,14 @@ function Reservation({ selectedSpace }) {
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState();
   const [messageErrorHelperText, setMessageErrorHelperText] = useState();
-  const [summaryInfo, setSummaryInfo] = useState();
   const [toHoursRange, setToHoursRange] = useState(hoursRange);
 
   // Will fetch information about selected space
   useEffect(() => {
     const fetchData = async () => {
-      //Implementar el set loading
-      // setLoading(true);
       try {
         const fetched = await axios.get(
-          `http://localhost:5000/spaces/${selectedSpace}`
+          `http://localhost:5000/spaces/${params.space}`
         );
         const spaceData = fetched.data;
         setSpaceData(spaceData);
@@ -58,7 +57,7 @@ function Reservation({ selectedSpace }) {
     };
 
     fetchData();
-  }, [selectedSpace]);
+  }, [params.space]);
 
   const handleDatePick = (date) => {
     setDate(date);
@@ -137,7 +136,8 @@ function Reservation({ selectedSpace }) {
         endDate,
         message,
       });
-      setSummaryInfo(res.data);
+      const summaryInfo = res.data;
+      navigate("/summary", { state: summaryInfo });
     } catch (error) {
       console.log(error);
     }
@@ -162,7 +162,7 @@ function Reservation({ selectedSpace }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        margin: "20px",
       }}
     >
       <div
@@ -254,39 +254,39 @@ function Reservation({ selectedSpace }) {
         </form>
         {availability && availability.status === "available" && (
           <div>
-            <Grid item xs={12}>
-              <TextField
-                id="message-text-field"
-                onChange={(event) => messageValidation(event)}
-                label="Any questions? Write them here"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                helperText={messageErrorHelperText}
-                error={messageError}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={() =>
-                  createReservation(
-                    spaceData.listingID,
-                    startDate,
-                    endDate,
-                    message
-                  )
-                }
-              >
-                Book Now
-              </Button>
-            </Grid>
+            <TextField
+              id="message-text-field"
+              onChange={(event) => messageValidation(event)}
+              label="Any questions? Write them here"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              helperText={messageErrorHelperText}
+              error={messageError}
+            />
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() =>
+                createReservation(
+                  spaceData.listingID,
+                  startDate,
+                  endDate,
+                  message
+                )
+              }
+            >
+              Book Now
+            </Button>
           </div>
         )}
-        {summaryInfo && <Summary summaryInfo={summaryInfo} />}
       </div>
+      <div
+        style={{
+          padding: "20px",
+        }}
+      ></div>
     </div>
   );
 }

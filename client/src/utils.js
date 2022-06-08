@@ -39,7 +39,7 @@ export const hoursRange = [
   "22:30",
   "23:00",
   "23:30",
-  "00:00",
+  "24:00",
 ];
 
 export const setMinutesAndHoursToDate = (date, timeString) => {

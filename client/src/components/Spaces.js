@@ -1,7 +1,27 @@
 import React from "react";
 import SpaceCard from "./SpaceCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const Spaces = ({ spaces, setSelectedSpace }) => {
+const Spaces = () => {
+  const [spaceList, setSpaceList] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetched = await axios.get(
+          "http://localhost:5000/spaces/all-spaces"
+        );
+        const spacesArray = fetched.data;
+        setSpaceList(spacesArray);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div
       style={{
@@ -10,7 +30,7 @@ const Spaces = ({ spaces, setSelectedSpace }) => {
         margin: "20px",
       }}
     >
-      {spaces.map((space) => (
+      {spaceList.map((space) => (
         <SpaceCard
           key={space.listingID}
           listingID={space.listingID}
@@ -18,7 +38,6 @@ const Spaces = ({ spaces, setSelectedSpace }) => {
           pricePerHour={space.pricePerHour}
           image={space.image}
           description={space.description}
-          setSelectedSpace={setSelectedSpace}
         />
       ))}
     </div>

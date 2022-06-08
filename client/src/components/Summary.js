@@ -1,17 +1,32 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
 import { isoStringDateToFormattedString } from "../utils";
-const Summary = ({ summaryInfo }) => {
-  console.log("SummaryInfo:", summaryInfo);
+import "./Summary.css";
+const Summary = () => {
+  const location = useLocation();
+  const summaryInfo = location.state;
+  console.log("summaryInfo:", summaryInfo);
+
   return (
-    <div>
-      <h1>Reservation Summary:</h1>
-      <div>Check In: {isoStringDateToFormattedString(summaryInfo.checkIn)}</div>
-      <div>
-        Check Out: {isoStringDateToFormattedString(summaryInfo.checkOut)}
+    <div className="container">
+      <div className="summary">
+        <h1 className="summaryTitle">Reservation Summary</h1>
+        <div className="summaryItem">
+          <span>Check In</span>
+          <span>{isoStringDateToFormattedString(summaryInfo.checkIn)}</span>
+        </div>
+        <div className="summaryItem">
+          <span>Check Out:</span>
+          <span>{isoStringDateToFormattedString(summaryInfo.checkOut)}</span>
+        </div>
+        <div className="summaryItem">
+          <span>Reservation ID:</span>
+          <span>{summaryInfo.reservationID}</span>
+        </div>
+        <div className="summaryItem total">
+          <span>Total</span>
+          <span>{summaryInfo.totalPrice}€</span>
+        </div>
       </div>
-      <div>Total: {summaryInfo.totalPrice}€</div>
-      <div>Reservation ID: {summaryInfo.reservationID}</div>
-      <div>Your message: {summaryInfo.userMessage}</div>
     </div>
   );
 };
