@@ -36,7 +36,6 @@ router.get("/availability", async (req, res) => {
       startDate,
       endDate
     );
-    console.log("availability", availability);
     res.status(200).json(availability);
   } catch (err) {
     console.log(err);
@@ -70,6 +69,7 @@ router.post("/book", async (req, res) => {
 
     //Generate a random reservation id
     const reservationID = uuid.v4().split("-")[4];
+    console.log("reservationID", reservationID);
 
     //Update space object
     space.listingBusy.push({
@@ -79,7 +79,6 @@ router.post("/book", async (req, res) => {
       reservationID,
     });
 
-    console.log("new space with new busy time", space);
     //Replace the old item with the new one by its index number.
     data[foundIndex] = space;
 
