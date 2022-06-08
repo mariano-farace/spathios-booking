@@ -254,35 +254,31 @@ function Reservation({ selectedSpace }) {
         </form>
         {availability && availability.status === "available" && (
           <div>
-            <Grid item xs={12}>
-              <TextField
-                id="message-text-field"
-                onChange={(event) => messageValidation(event)}
-                label="Any questions? Write them here"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={4}
-                helperText={messageErrorHelperText}
-                error={messageError}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={() =>
-                  createReservation(
-                    spaceData.listingID,
-                    startDate,
-                    endDate,
-                    message
-                  )
-                }
-              >
-                Book Now
-              </Button>
-            </Grid>
+            <TextField
+              id="message-text-field"
+              onChange={(event) => messageValidation(event)}
+              label="Any questions? Write them here"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              helperText={messageErrorHelperText}
+              error={messageError}
+            />
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() =>
+                createReservation(
+                  spaceData.listingID,
+                  startDate,
+                  endDate,
+                  message
+                )
+              }
+            >
+              Book Now
+            </Button>
           </div>
         )}
       </div>
