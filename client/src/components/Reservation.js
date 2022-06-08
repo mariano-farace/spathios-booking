@@ -162,7 +162,7 @@ function Reservation({ selectedSpace }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        margin: "20px",
       }}
     >
       <div
@@ -285,8 +285,9 @@ function Reservation({ selectedSpace }) {
             </Grid>
           </div>
         )}
-        {summaryInfo && <Summary summaryInfo={summaryInfo} />}
       </div>
+
+      {summaryInfo && <Summary summaryInfo={summaryInfo} />}
     </div>
   );
 }

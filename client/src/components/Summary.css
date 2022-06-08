@@ -1,0 +1,22 @@
+.summary {
+  flex: 1;
+  border: 0.5px solid lightgrey;
+  border-radius: 10px;
+  padding: 20px;
+  height: 50vh;
+}
+
+.summaryTitle {
+  font-weight: 200;
+}
+
+.summaryItem {
+  margin: 30px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.total {
+  font-weight: 500;
+  font-size: 24px;
+}
