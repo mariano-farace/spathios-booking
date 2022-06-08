@@ -286,8 +286,13 @@ function Reservation({ selectedSpace }) {
           </div>
         )}
       </div>
-
-      {summaryInfo && <Summary summaryInfo={summaryInfo} />}
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
+        {summaryInfo && <Summary summaryInfo={summaryInfo} />}
+      </div>
     </div>
   );
 }
