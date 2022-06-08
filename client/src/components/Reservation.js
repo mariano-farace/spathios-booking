@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import AvailabilityDisplay from "../components/AvailabilityDisplay";
 import Summary from "../components/Summary";
+import { useParams } from "react-router-dom";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,6 +22,8 @@ import {
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 function Reservation({ selectedSpace }) {
+  let params = useParams();
+
   const [spaceData, setSpaceData] = useState(null);
   // La fecha seleccionada
   const [date, setDate] = useState(new Date());
@@ -43,11 +46,9 @@ function Reservation({ selectedSpace }) {
   // Will fetch information about selected space
   useEffect(() => {
     const fetchData = async () => {
-      //Implementar el set loading
-      // setLoading(true);
       try {
         const fetched = await axios.get(
-          `http://localhost:5000/spaces/${selectedSpace}`
+          `http://localhost:5000/spaces/${params.space}`
         );
         const spaceData = fetched.data;
         setSpaceData(spaceData);
@@ -58,7 +59,7 @@ function Reservation({ selectedSpace }) {
     };
 
     fetchData();
-  }, [selectedSpace]);
+  }, [params.space]);
 
   const handleDatePick = (date) => {
     setDate(date);

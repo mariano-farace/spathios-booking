@@ -2,38 +2,37 @@ import { useEffect, useState } from "react";
 import Reservation from "./components/Reservation";
 import Spaces from "./components/Spaces";
 import axios from "axios";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import Summary from "./components/Summary";
 
 function App() {
-  const [spaces, setSpaces] = useState([]);
-  const [selectedSpace, setSelectedSpace] = useState(null);
+  const [spaceList, setSpaceList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      //Implementar el set loading
-      // setLoading(true);
       try {
         const fetched = await axios.get(
           "http://localhost:5000/spaces/all-spaces"
         );
         const spacesArray = fetched.data;
-        setSpaces(spacesArray);
+        setSpaceList(spacesArray);
       } catch (error) {
         console.error(error.message);
       }
-      //setLoading(false);
     };
 
     fetchData();
   }, []);
 
   return (
-    <div className="App">
-      {!selectedSpace ? (
-        <Spaces spaces={spaces} setSelectedSpace={setSelectedSpace} />
-      ) : (
-        <Reservation selectedSpace={selectedSpace} />
-      )}
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route exact path="/" element={<Spaces spaceList={spaceList} />} />
+          <Route path="/:space" element={<Reservation />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
