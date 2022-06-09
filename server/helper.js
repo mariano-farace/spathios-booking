@@ -34,10 +34,8 @@ const CheckAvailability = (listingBusy, startDateTime, endDateTime) => {
 };
 
 const calculatePrice = (startDate, endDate, pricePerHour) => {
-  const diff = differenceInMinutes(endDate, startDate);
+  const diff = differenceInMinutes(parseISO(endDate), parseISO(startDate));
   const hours = diff / 60;
-  console.log("diff", diff);
-  console.log("hours", hours);
 
   // if hours 8 or more, then price is 93% of the pricePerHour
   if (hours >= 8) {
