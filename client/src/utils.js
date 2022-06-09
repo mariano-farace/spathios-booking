@@ -54,9 +54,13 @@ export const calculatePrice = (startDate, endDate, pricePerHour) => {
 
   // if hours 8 or more, then price is 93% of the pricePerHour
   if (hours >= 8) {
-    return pricePerHour * hours * 0.93;
+    const price = pricePerHour * hours * 0.93;
+    const roundedPrice = Math.round(price * 10) / 10;
+    return roundedPrice;
   } else {
-    return hours * pricePerHour;
+    const price = pricePerHour * hours;
+    const roundedPrice = Math.round(price * 10) / 10;
+    return roundedPrice;
   }
 };
 
