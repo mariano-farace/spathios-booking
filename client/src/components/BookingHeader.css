@@ -1,0 +1,15 @@
+.base {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.discount {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

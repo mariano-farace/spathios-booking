@@ -20,6 +20,7 @@ import {
 } from "../utils";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import BookingHeader from "../components/BookingHeader";
 function Reservation() {
   let params = useParams();
   const navigate = useNavigate();
@@ -186,6 +187,9 @@ function Reservation() {
             alignItems="center"
             spacing={2}
           >
+            <Grid item xs={10}>
+              <BookingHeader spaceData={spaceData} />
+            </Grid>
             <Grid item xs={10}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DesktopDatePicker
