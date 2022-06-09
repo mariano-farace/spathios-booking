@@ -5,8 +5,7 @@ const port = 5000;
 const reservationRouter = require("./routes/reservation");
 const spacesRouter = require("./routes/spaces");
 
-//TODO improve error handling
-app.use(express.json()); // for parsing application/json
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(

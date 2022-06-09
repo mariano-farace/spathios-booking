@@ -54,7 +54,6 @@ function Reservation() {
       } catch (error) {
         console.error(error.message);
       }
-      //setLoading(false);
     };
 
     fetchData();
@@ -80,13 +79,10 @@ function Reservation() {
 
   const handleEndTime = (e, date) => {
     const finalEndDate = setMinutesAndHoursToDate(date, e.target.value);
-    console.log("finalEndDate:", finalEndDate);
     setEndTime(e.target.value);
     setEndDate(finalEndDate);
     setAvailability();
   };
-
-  //TODO hacer el descuento del 7% cuando son mas de 8 horas!!
 
   // Calcula el precio de la reserva cuando se selecciona una fecha y horas
   useEffect(() => {
@@ -148,7 +144,6 @@ function Reservation() {
 
   useEffect(() => {
     if (startTime) {
-      console.log("startTime:", startTime);
       const index = hoursRange.indexOf(startTime);
       const newHoursRange = hoursRange.slice(index + 2);
       setEndDate("");

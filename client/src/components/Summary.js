@@ -4,7 +4,6 @@ import "./Summary.css";
 const Summary = () => {
   const location = useLocation();
   const summaryInfo = location.state;
-  console.log("summaryInfo:", summaryInfo);
 
   return (
     <div className="container">

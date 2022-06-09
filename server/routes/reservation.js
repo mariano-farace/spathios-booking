@@ -87,7 +87,6 @@ router.post("/book", async (req, res) => {
 
     //Generate a random reservation id
     const reservationID = uuid.v4().split("-")[4];
-    console.log("reservationID", reservationID);
 
     //Update space object
     space.listingBusy.push({
@@ -109,8 +108,6 @@ router.post("/book", async (req, res) => {
       formattedEndDateTime,
       space.pricePerHour
     );
-
-    console.log("price", price);
 
     res.status(200).json({
       message: "Booking successful",
