@@ -1,4 +1,9 @@
-const { CheckAvailability, calculatePrice } = require("../helper");
+const {
+  CheckAvailability,
+  calculatePrice,
+  availabilitySchema,
+  bookSchema,
+} = require("../helper");
 var uuid = require("uuid");
 const router = require("express").Router();
 const fs = require("fs").promises;
@@ -20,7 +25,13 @@ router.get("/listingbusy", async (req, res) => {
 });
 
 router.get("/availability", async (req, res) => {
-  //TODO handle empty request with 400
+  try {
+    await availabilitySchema.validateAsync(req.query);
+  } catch (err) {
+    const errMsg = err.details[0].message;
+    return res.status(400).json({ "status:": "error", message: errMsg });
+  }
+
   const id = parseInt(req.query.id);
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
@@ -44,6 +55,13 @@ router.get("/availability", async (req, res) => {
 });
 
 router.post("/book", async (req, res) => {
+  try {
+    await bookSchema.validateAsync(req.body);
+  } catch (err) {
+    const errMsg = err.details[0].message;
+    return res.status(400).json({ "status:": "error", message: errMsg });
+  }
+
   const id = parseInt(req.body.id);
   const startDateTime = req.body.startDate;
   const endDateTime = req.body.endDate;
@@ -91,6 +109,8 @@ router.post("/book", async (req, res) => {
       formattedEndDateTime,
       space.pricePerHour
     );
+
+    console.log("price", price);
 
     res.status(200).json({
       message: "Booking successful",
