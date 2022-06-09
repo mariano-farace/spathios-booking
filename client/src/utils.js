@@ -51,9 +51,13 @@ export const setMinutesAndHoursToDate = (date, timeString) => {
 export const calculatePrice = (startDate, endDate, pricePerHour) => {
   const diff = differenceInMinutes(endDate, startDate);
   const hours = diff / 60;
-  const price = hours * pricePerHour;
 
-  return price;
+  // if hours 8 or more, then price is 93% of the pricePerHour
+  if (hours >= 8) {
+    return pricePerHour * hours * 0.93;
+  } else {
+    return hours * pricePerHour;
+  }
 };
 
 export const mailRegex =
