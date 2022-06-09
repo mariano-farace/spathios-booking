@@ -151,6 +151,8 @@ function Reservation() {
       console.log("startTime:", startTime);
       const index = hoursRange.indexOf(startTime);
       const newHoursRange = hoursRange.slice(index + 2);
+      setEndDate("");
+      setEndTime("");
       setToHoursRange(newHoursRange);
     }
   }, [startTime]);
